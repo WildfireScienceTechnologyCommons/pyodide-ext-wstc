@@ -107,11 +107,14 @@ jobs:
           make -C cpython
           ccache -s
 
-      - name: Pre-download GMP tarball
+      - name: Pre-download libgmp
         shell: bash -l {0}
         run: |
           mkdir -p pyodide-build/downloads
           curl -L -o pyodide-build/downloads/gmp-6.3.0.tar.xz https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz
+          if [ ! -s pyodide-build/downloads/gmp-6.3.0.tar.xz ]; then
+            curl -L -o pyodide-build/downloads/gmp-6.3.0.tar.xz https://mirrors.kernel.org/gnu/gmp/gmp-6.3.0.tar.xz
+          fi
 
 
       - name: build Pyodide with packages
