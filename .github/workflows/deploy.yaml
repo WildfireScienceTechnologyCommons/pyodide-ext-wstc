@@ -6,7 +6,7 @@ on:
       pyodide_packages:
         description: 'Pyodide packages to build, will set PYODIDE_PACKAGES'
         required: true
-        default: '*'
+        default: 'numpy pandas matplotlib scikit-learn seaborn'
         type: string
   push:
     branches:
@@ -26,7 +26,7 @@ jobs:
       EMCC_CORES: 3
       PYODIDE_JOBS: 3
       CCACHE_DIR: /tmp/ccache
-      PYODIDE_PACKAGES: ${{ inputs.pyodide_packages || '*' }}
+      PYODIDE_PACKAGES: ${{ inputs.pyodide_packages || 'numpy pandas matplotlib scikit-learn seaborn' }}
  
     steps:
       - uses: actions/checkout@v4
@@ -107,27 +107,27 @@ jobs:
           make -C cpython
           ccache -s
 
-      - name: Pre-download libgmp
-        shell: bash -l {0}
-        run: |
-          mkdir -p pyodide-build/downloads
+      # - name: Pre-download libgmp
+      #   shell: bash -l {0}
+      #   run: |
+      #     mkdir -p pyodide-build/downloads
 
-          # Try mirror first
-          if [ ! -s pyodide-build/downloads/gmp-6.3.0.tar.xz ]; then
-            echo "Downloading GMP from mirror..."
-            curl -L --retry 5 --connect-timeout 10 --max-time 300 \
-                 -o pyodide-build/downloads/gmp-6.3.0.tar.xz \
-                 https://mirrors.kernel.org/gnu/gmp/gmp-6.3.0.tar.xz
-          fi
+      #     # Try mirror first
+      #     if [ ! -s pyodide-build/downloads/gmp-6.3.0.tar.xz ]; then
+      #       echo "Downloading GMP from mirror..."
+      #       curl -L --retry 5 --connect-timeout 10 --max-time 300 \
+      #            -o pyodide-build/downloads/gmp-6.3.0.tar.xz \
+      #            https://mirrors.kernel.org/gnu/gmp/gmp-6.3.0.tar.xz
+      #     fi
           
-          # Fallback to official FTP
-          if [ ! -s pyodide-build/downloads/gmp-6.3.0.tar.xz ]; then
-            echo "Mirror failed, trying official FTP..."
-            curl -L --retry 5 --connect-timeout 10 --max-time 300 \
-                 -o pyodide-build/downloads/gmp-6.3.0.tar.xz \
-                 https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz || \
-                 echo "Skipping GMP download (will attempt to build from existing source)"
-          fi
+      #     # Fallback to official FTP
+      #     if [ ! -s pyodide-build/downloads/gmp-6.3.0.tar.xz ]; then
+      #       echo "Mirror failed, trying official FTP..."
+      #       curl -L --retry 5 --connect-timeout 10 --max-time 300 \
+      #            -o pyodide-build/downloads/gmp-6.3.0.tar.xz \
+      #            https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz || \
+      #            echo "Skipping GMP download (will attempt to build from existing source)"
+      #     fi
 
 
       - name: build Pyodide with packages
