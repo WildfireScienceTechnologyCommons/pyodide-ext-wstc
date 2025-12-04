@@ -111,9 +111,22 @@ jobs:
         shell: bash -l {0}
         run: |
           mkdir -p pyodide-build/downloads
-          curl -L -o pyodide-build/downloads/gmp-6.3.0.tar.xz https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz
+
+          # Try mirror first
           if [ ! -s pyodide-build/downloads/gmp-6.3.0.tar.xz ]; then
-            curl -L -o pyodide-build/downloads/gmp-6.3.0.tar.xz https://mirrors.kernel.org/gnu/gmp/gmp-6.3.0.tar.xz
+            echo "Downloading GMP from mirror..."
+            curl -L --retry 5 --connect-timeout 10 --max-time 300 \
+                 -o pyodide-build/downloads/gmp-6.3.0.tar.xz \
+                 https://mirrors.kernel.org/gnu/gmp/gmp-6.3.0.tar.xz
+          fi
+          
+          # Fallback to official FTP
+          if [ ! -s pyodide-build/downloads/gmp-6.3.0.tar.xz ]; then
+            echo "Mirror failed, trying official FTP..."
+            curl -L --retry 5 --connect-timeout 10 --max-time 300 \
+                 -o pyodide-build/downloads/gmp-6.3.0.tar.xz \
+                 https://ftp.gnu.org/gnu/gmp/gmp-6.3.0.tar.xz || \
+                 echo "Skipping GMP download (will attempt to build from existing source)"
           fi
 
 
