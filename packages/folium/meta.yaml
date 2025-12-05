@@ -8,9 +8,11 @@ source:
   sha256: f0bc2a92acde20bca56367aa5c1c376c433f450608d058daebab2fc9bf8198bf
 requirements:
   run:
+    - numpy
     - branca
     - jinja2
     - requests
+    - xyzservices
 about:
   home: https://github.com/python-visualization/folium
   PyPI: https://pypi.org/project/folium
