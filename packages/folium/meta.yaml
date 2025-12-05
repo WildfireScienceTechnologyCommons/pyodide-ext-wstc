@@ -1,0 +1,13 @@
+package:
+  name: folium
+  version: 0.20.0
+  top-level:
+    - folium
+source:
+  url: https://files.pythonhosted.org/packages/b5/a8/5f764f333204db0390362a4356d03a43626997f26818a0e9396f1b3bd8c9/folium-0.20.0-py2.py3-none-any.whl
+  sha256: f0bc2a92acde20bca56367aa5c1c376c433f450608d058daebab2fc9bf8198bf
+about:
+  home: https://github.com/python-visualization/folium
+  PyPI: https://pypi.org/project/folium
+  summary: Make beautiful maps with Leaflet.js & Python
+  license: MIT
